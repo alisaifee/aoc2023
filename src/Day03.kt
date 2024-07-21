@@ -29,20 +29,25 @@ class Entry(
 class Schema(
     input: List<String>,
 ) {
-    val partNumbers: MutableList<Entry> = mutableListOf()
-    val symbols: MutableList<Entry> = mutableListOf()
-
-    init {
-        input.forEachIndexed { y, line ->
-            val numericMatches = NUMEXPR.findAll(line).toList()
-            val symbolMatches = SYMBOLEXPR.findAll(line).toList()
-            numericMatches.forEach { number ->
-                partNumbers.add(Entry(number.value, number.range.first, y))
-            }
-            symbolMatches.forEach { symbol ->
-                symbols.add(Entry(symbol.value, symbol.range.first, y))
-            }
-        }
+    val partNumbers: List<Entry> by lazy {
+        input
+            .mapIndexed { y, line ->
+                NUMEXPR
+                    .findAll(line)
+                    .map { num ->
+                        Entry(num.value, num.range.first, y)
+                    }.toList()
+            }.flatten()
+    }
+    val symbols: List<Entry> by lazy {
+        input
+            .mapIndexed { y, line ->
+                SYMBOLEXPR
+                    .findAll(line)
+                    .map { sym ->
+                        Entry(sym.value, sym.range.first, y)
+                    }.toList()
+            }.flatten()
     }
 }
 
