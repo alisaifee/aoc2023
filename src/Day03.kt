@@ -2,7 +2,7 @@ import kotlin.math.abs
 import kotlin.text.Regex
 
 val NUMEXPR = Regex("(\\d+)")
-val SYMBOLEXPR = Regex("[^0-9.]")
+val SYMBOLEXPR = Regex("[^\\d.]")
 
 class Entry(
     val value: String,
